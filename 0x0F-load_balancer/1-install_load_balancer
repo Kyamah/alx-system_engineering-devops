@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Create a script to install and configure HAProxy on lb-01 server
+# Configure HAProxy to send traffic to web-01 and web-02 servers
+
+# Install and configure HAproxy on my lb-01 server.
+sudo apt-get -y update
+apt-get -y install haproxy
+sudo chwon $USER:USER /etc/haproxy/haproxy.cfg
+
+echo "
+frontend  Mjte254
+    bind *:80
+    mode http
+    default_backend app
+
+backend app
+    balance roundrobin
+    server 335227-web-01 100.25.28.203:80 check
+    server 335227-web-02 100.25.204.114:80 check" >> /etc/haproxy/haproxy.cfg
+
+sudo service haproxy restart
