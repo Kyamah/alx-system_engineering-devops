@@ -1,24 +1,27 @@
 #!/usr/bin/python3
-"""function that queries the Reddit API and prints the titles
-of the first 10 hot posts listed for a given subreddit."""
+"""1-top_ten.py - Query Reddit API & find Top10 subreddits hot posts"""
+import json
+import requests
 
 
 def top_ten(subreddit):
-        """function that queries the Reddit API and prints the titles
-            of the first 10 hot posts listed for a given subreddit."""
-                import requests
-                    import sys
+    """Return Top10 subreddit hot posts"""
+    baseURL = "https://www.reddit.com/r/"
+    url = baseURL + subreddit + "/hot/.json?limit=10"
+    # https://www.reddit.com/r/programming/hot/.json&limit=10
 
-                        url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-                            headers = {'User-Agent': 'Mozilla/5.0'}
-                                try:
-                                            response = requests.get(url, headers=headers,
-                                                                                    allow_redirects=False)
-                                                    if response.status_code == 200:
-                                                                    children = response.json().get('data').get('children')
-                                                                                for i in range(10):
-                                                                                                    print(children[i].get('data').get('title'))
-                                                                                                            else:
-                                                                                                                            print("None")
-                                                                                                                                except Exception:
-                                                                                                                                            print("None")
+    headers = {
+        'User-Agent': 'My User Agent 1.0',
+        'From': '214@holbertonschool.com'
+    }
+    result = requests.get(url, headers=headers)
+
+    if result.status_code == 200:
+        result = result.json()
+        children = result.get('data').get('children')
+        for i in range(10):
+            # print("{}".format(result['data']['children'][i]['data']['title']))
+            title = children[i].get('data').get('title')
+            print("{}".format(title))
+    else:
+        print("None")
